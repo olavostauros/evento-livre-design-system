@@ -48,6 +48,7 @@ import {
   tracking,
   typeScale,
   typeSteps,
+  type AnimationPreset,
   type ColorRef,
   type ElevationLevel,
   type PaletteName,
@@ -241,14 +242,19 @@ function emitMotionInline(): string[] {
   const out = ["  /* Motion: defaults and keyframe presets, tempo applied on the element. */"];
   out.push(line("--default-transition-duration", tempo(durations.base)));
   out.push(line("--default-transition-timing-function", "var(--ease-standard)"));
-  for (const [name, preset] of Object.entries(animations)) {
-    out.push(line(`--animate-${name}`, `${name} ${tempo(durations[preset.duration])} var(--ease-${preset.easing}) both`));
+  for (const [name, preset] of Object.entries(animations) as Array<[string, AnimationPreset]>) {
+    const ms = durations[preset.duration];
+    const value = preset.loop
+      ? `${name} ${ms}ms var(--ease-${preset.easing}) infinite` // loops ignore tempo
+      : `${name} ${tempo(ms)} var(--ease-${preset.easing}) both`;
+    out.push(line(`--animate-${name}`, value));
   }
   out.push("");
   out.push("  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }");
   out.push("  @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }");
   out.push(`  @keyframes slide-up { from { opacity: 0; transform: translateY(${tempoPx(distances.slide)}); } to { opacity: 1; transform: translateY(0); } }`);
   out.push(`  @keyframes scale-in { from { opacity: 0; transform: scale(calc(1 - (1 - ${scaleEnter}) * var(${P}-tempo))); } to { opacity: 1; transform: scale(1); } }`);
+  out.push("  @keyframes spin { to { transform: rotate(360deg); } }");
   return out;
 }
 

@@ -34,6 +34,7 @@ page (or the reverse) gets its own tempo without any component knowing.
 | enter | 0, 0, 0.2, 1 | `ease-enter` | arriving |
 | exit | 0.4, 0, 1, 1 | `ease-exit` | leaving |
 | emphasized | 0.34, 1.4, 0.64, 1 | `ease-emphasized` | one overshoot, B2C emphasis only |
+| linear | linear | `ease-linear` | loops only |
 
 Distances: slide 8px, slide-lg 16px. Scale-in starts at 0.96. Both are
 multiplied by tempo, so reduced motion collapses them to nothing.
@@ -43,6 +44,11 @@ multiplied by tempo, so reduced motion collapses them to nothing.
 `animate-fade-in`, `animate-fade-out`, `animate-slide-up`, `animate-scale-in`
 run once with `both` fill. `transition` alone uses the base duration and the
 standard easing at the register's tempo.
+
+`animate-spin` is a loop: `slower` (500ms) per turn, linear, infinite. Loops
+are **not** multiplied by tempo. A loop at 0ms is meaningless, and a 16px
+spinner is not a vestibular trigger, so reduced-motion users still see it
+turn. The meaning is carried by `aria-busy` regardless.
 
 ## Rules
 

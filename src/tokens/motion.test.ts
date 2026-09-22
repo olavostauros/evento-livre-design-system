@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { animations, durations, easings, tempos } from "./motion.ts";
+import { animations, durations, easings, tempos, type AnimationPreset } from "./motion.ts";
 
 describe("motion", () => {
   test("durations ascend and nothing exceeds 500ms before tempo", () => {
@@ -21,7 +21,16 @@ describe("motion", () => {
     }
   });
 
-  test("easings are cubic-bezier strings", () => {
-    for (const value of Object.values(easings)) expect(value).toMatch(/^cubic-bezier\(/);
+  test("easings are cubic-bezier strings, except linear for loops", () => {
+    for (const [name, value] of Object.entries(easings)) {
+      if (name === "linear") expect(value).toBe("linear");
+      else expect(value).toMatch(/^cubic-bezier\(/);
+    }
+  });
+
+  test("linear is used by loops only, and every loop is linear", () => {
+    for (const preset of Object.values(animations) as AnimationPreset[]) {
+      expect(preset.easing === "linear").toBe(preset.loop === true);
+    }
   });
 });

@@ -27,6 +27,8 @@ export const easings = {
   exit: "cubic-bezier(0.4, 0, 1, 1)",
   /** One overshoot. B2C emphasis only, never on data surfaces. */
   emphasized: "cubic-bezier(0.34, 1.4, 0.64, 1)",
+  /** Loops only (spinners). Constant speed, no perceived start or end. */
+  linear: "linear",
 } as const;
 
 export type Easing = keyof typeof easings;
@@ -47,12 +49,27 @@ export const tempos: Readonly<Record<Register | "reduced", number>> = {
   reduced: 0,
 };
 
-/** Keyframe presets, emitted as `animate-*` utilities. */
+export interface AnimationPreset {
+  readonly duration: Duration;
+  readonly easing: Easing;
+  /**
+   * Runs forever at its own speed. Loops are not multiplied by tempo: a
+   * loop at 0ms is meaningless, and a small spinner is not a vestibular
+   * trigger. Reduced-motion users still see it turn.
+   */
+  readonly loop?: true;
+}
+
+/**
+ * Keyframe presets, emitted as `animate-*` utilities. One-shot presets run
+ * once with `both` fill at the register's tempo.
+ */
 export const animations = {
   "fade-in": { duration: "base", easing: "enter" },
   "fade-out": { duration: "fast", easing: "exit" },
   "slide-up": { duration: "base", easing: "enter" },
   "scale-in": { duration: "base", easing: "enter" },
-} as const satisfies Record<string, { duration: Duration; easing: Easing }>;
+  spin: { duration: "slower", easing: "linear", loop: true },
+} as const satisfies Record<string, AnimationPreset>;
 
 export type Animation = keyof typeof animations;

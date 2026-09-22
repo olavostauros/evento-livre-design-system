@@ -1,3 +1,4 @@
 /* Tailwind entry for Evento Livre products. Import this once per app. */
 @import "tailwindcss";
+@import "./fonts.css";
 @import "./theme.css";

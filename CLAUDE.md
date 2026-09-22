@@ -38,7 +38,7 @@ src/
   tokens/               single source of truth for design values, with tests
   brand/logotype/       logotype source files and exports
   motion/               motion primitives (durations, easings, presets)
-  styles/               global CSS, Tailwind entry, generated theme.css
+  styles/               Tailwind entry, fonts.css + fonts/, generated theme.css
   components/
     primitives/         Button, Input, Text, Icon, ...
     patterns/           composed pieces: Form, Card, Modal, DataTable, ...
@@ -58,6 +58,9 @@ can be swapped:
 - Name tokens by role (`brand-primary`, `accent-b2c`), never by hue.
 - Keep the `Logo` component's API independent of the artwork.
 - Put every font, duration and easing behind a token.
+- Values that differ by register (accent, type size, density, tempo) or by
+  theme (colour roles, shadows) are runtime custom properties switched by
+  `data-register` and `data-theme`. Components stay register-agnostic.
 
 Each record says what may change without a new record and what may not.
 When one is revisited, update the record and supersede it properly. Do not

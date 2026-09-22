@@ -3,8 +3,9 @@
 Shared tokens, brand assets and React components for Evento Livre products.
 Start with `MISSION.md`, then `CLAUDE.md`.
 
-Status: colour tokens and the Tailwind theme pipeline exist. No components
-or brand assets yet.
+Status: all foundation tokens (colour, typography, spacing, radii,
+elevation, motion) and the Tailwind theme pipeline exist, as experiments.
+No components or brand assets yet.
 
 ```sh
 bun install

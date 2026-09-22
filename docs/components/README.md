@@ -8,3 +8,4 @@ accessibility notes. Mirror the folder layout in `src/components/`.
 | [Button](Button.md) | `primitives/Button` | experimental |
 | [Text](Text.md) | `primitives/Text` | experimental |
 | [Icon](Icon.md) | `primitives/Icon` | experimental |
+| [Link](Link.md) | `primitives/Link` | experimental |

@@ -13,11 +13,13 @@ B2B (event producers) and B2C (event goers).
 
 - **React** function components only. No class components.
 - **TypeScript** strict mode. No `any`. Export prop types alongside components.
-- **Tailwind CSS** for styling. Tokens live in `src/tokens/` and feed
-  `tailwind.config.ts`. Components use Tailwind classes, never inline styles
-  or raw hex values.
-- Package manager, bundler, test runner and docs tool are not chosen yet.
-  Record the choice in `docs/decisions/` before adding one.
+- **Tailwind CSS v4** for styling. Tokens live in `src/tokens/` and are
+  compiled into `src/styles/theme.css` (a `@theme` block) by
+  `scripts/build-theme.ts`. There is no `tailwind.config.ts`. Components use
+  Tailwind classes, never inline styles or raw hex values.
+- **Bun** is the package manager, bundler and test runner (see 0005). The
+  docs tool is not chosen yet; record the choice in `docs/decisions/` before
+  adding one.
 
 ## Layout
 
@@ -29,11 +31,13 @@ docs/
   brand/                semiotics (read first), logotype, voice, usage rules
   foundations/          colour, type, spacing, motion guidance
   components/           per-component usage docs
+scripts/
+  build-theme.ts        generates src/styles/theme.css from src/tokens/
 src/
   tokens/               single source of truth for design values
   brand/logotype/       logotype source files and exports
   motion/               motion primitives (durations, easings, presets)
-  styles/               global CSS, Tailwind entry
+  styles/               global CSS, Tailwind entry, generated theme.css
   components/
     primitives/         Button, Input, Text, Icon, ...
     patterns/           composed pieces: Form, Card, Modal, DataTable, ...
@@ -83,7 +87,7 @@ what is seen and not read.
 ## Working rules
 
 - **Tokens first.** If a value is not in `src/tokens/`, add it there before
-  using it. Tailwind config reads from tokens, not the other way round.
+  using it. The Tailwind theme is generated from tokens, never edited by hand.
 - **One component, one folder.** `ComponentName/ComponentName.tsx`,
   `index.ts`, tests, and a doc entry in `docs/components/`.
 - **Accessibility is not optional.** Keyboard, focus, ARIA, contrast (AA).

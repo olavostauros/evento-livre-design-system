@@ -33,8 +33,9 @@ docs/
   components/           per-component usage docs
 scripts/
   build-theme.ts        generates src/styles/theme.css from src/tokens/
+  build-palette.ts      OKLCH recipe that prints the colour scales for colors.ts
 src/
-  tokens/               single source of truth for design values
+  tokens/               single source of truth for design values, with tests
   brand/logotype/       logotype source files and exports
   motion/               motion primitives (durations, easings, presets)
   styles/               global CSS, Tailwind entry, generated theme.css
@@ -44,7 +45,7 @@ src/
     b2b/                producer-facing compositions
     b2c/                attendee-facing compositions
   hooks/                shared React hooks
-  utils/                cn(), variant helpers, etc.
+  utils/                cn(), variant helpers, colour maths (contrast), etc.
 ```
 
 ## Brand decisions are temporary
@@ -89,6 +90,11 @@ what is seen and not read.
 
 - **Tokens first.** If a value is not in `src/tokens/`, add it there before
   using it. The Tailwind theme is generated from tokens, never edited by hand.
+  Run `bun run build:theme` after touching tokens; `bun run check` must pass.
+- **Roles over palette.** Surfaces, text and borders use role utilities
+  (`bg-canvas`, `text-fg-muted`, `border-border-strong`), which switch with
+  theme and register. Reach into `brand-*`, `accent-*` and status scales
+  only as `docs/foundations/colour.md` allows.
 - **One component, one folder.** `ComponentName/ComponentName.tsx`,
   `index.ts`, tests, and a doc entry in `docs/components/`.
 - **Accessibility is not optional.** Keyboard, focus, ARIA, contrast (AA).

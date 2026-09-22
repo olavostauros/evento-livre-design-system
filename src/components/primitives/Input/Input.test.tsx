@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
+import { Field } from "../../patterns/Field/Field.tsx";
 import { Input, inputSizes, inputTypes } from "./Input.tsx";
 
 const render = (ui: React.ReactElement): string => renderToStaticMarkup(ui);
@@ -90,5 +91,32 @@ describe("Input", () => {
       expect(className).not.toMatch(/#[0-9a-f]{3,8}/i);
       expect(className).not.toMatch(/\[/);
     }
+  });
+
+  test("inside a Field it takes the wired id, description, error and required", () => {
+    const html = render(
+      <Field label="E-mail" id="f" description="d" error="e" required>
+        <Input type="email" />
+      </Field>,
+    );
+    const input = /<input [^>]*>/.exec(html)?.[0] ?? "";
+    expect(input).toContain('id="f-control"');
+    expect(input).toContain('aria-describedby="f-description f-error"');
+    expect(input).toContain('aria-invalid="true"');
+    expect(input).toContain('data-invalid="true"');
+    expect(input).toContain(" required=");
+  });
+
+  test("inside a Field, explicit props win and invalid={false} clears the error state", () => {
+    const html = render(
+      <Field label="x" id="f" description="d" error="e">
+        <Input id="mine" aria-describedby="extra" invalid={false} />
+      </Field>,
+    );
+    const input = /<input [^>]*>/.exec(html)?.[0] ?? "";
+    expect(input).toContain('id="mine"');
+    expect(input).toContain('aria-describedby="extra f-description f-error"');
+    expect(input).not.toContain('aria-invalid="');
+    expect(input).not.toContain("data-invalid");
   });
 });

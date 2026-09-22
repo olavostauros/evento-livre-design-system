@@ -14,7 +14,8 @@ one component serves both registers and both themes.
 - Several lines: a later `Textarea`.
 - A choice among options: `Select`, `Checkbox`, `Radio`, `Switch`, later.
 - Without a `Label`. A field with only a placeholder has no name once
-  someone types.
+  someone types. In a form row, use `Field`, which wires the label,
+  description and error for you.
 
 ## Props
 
@@ -22,7 +23,7 @@ one component serves both registers and both themes.
 |---|---|---|---|
 | `type` | `text` `email` `password` `search` `tel` `url` `number` `date` `time` `datetime-local` | `text` | Text-like types only |
 | `size` | `sm` `md` `lg` | `md` | Maps to `control-sm/md/lg` density tokens |
-| `invalid` | boolean | false | `aria-invalid="true"` and a danger border; add a visible message |
+| `invalid` | boolean | | `aria-invalid="true"` and a danger border; add a visible message. Inherits from `Field` when unset; `false` overrides |
 | `disabled` | boolean | | Native. Out of the tab order, half opacity |
 | `readOnly` | boolean | | Native. Sunken background, still focusable and selectable |
 | `required` | boolean | | Native. Pair with `Label required` |
@@ -32,6 +33,11 @@ Everything else on `InputHTMLAttributes` passes through, except the HTML
 constrain width with `className` or the layout instead. The field is
 always `block w-full`. `className` is appended after the component's own
 classes.
+
+Inside a `Field`, the input reads `id`, `aria-describedby`, `aria-invalid`
+and `required` from `FieldContext` (`src/hooks/useFieldControl.ts`).
+Explicit props win; an explicit `aria-describedby` is kept and the Field's
+ids are appended. Outside a Field nothing changes.
 
 ## Sizes by register
 
@@ -64,33 +70,17 @@ Border, placeholder and text roles come straight from
 ## Examples
 
 ```tsx
-import { useId } from "react";
+import { Field } from "@evento-livre/design-system/components/patterns/Field";
 import { Input } from "@evento-livre/design-system/components/primitives/Input";
 import { Label } from "@evento-livre/design-system/components/primitives/Label";
-import { Text } from "@evento-livre/design-system/components/primitives/Text";
 
-// B2C: e-mail for event alerts, with a visible error
+// B2C: e-mail for event alerts, with a visible error. Field wires the
+// label, the error and aria-invalid; Input only says what it is.
 function AlertEmail({ error }: { error?: string }) {
-  const id = useId();
-  const errorId = `${id}-error`;
   return (
-    <div className="flex flex-col gap-stack-sm">
-      <Label htmlFor={id} required>E-mail</Label>
-      <Input
-        id={id}
-        type="email"
-        autoComplete="email"
-        inputMode="email"
-        required
-        invalid={Boolean(error)}
-        aria-describedby={error ? errorId : undefined}
-      />
-      {error && (
-        <Text id={errorId} variant="body-sm" tone="danger">
-          {error}
-        </Text>
-      )}
-    </div>
+    <Field label="E-mail" error={error} required>
+      <Input type="email" autoComplete="email" inputMode="email" />
+    </Field>
   );
 }
 
@@ -109,7 +99,7 @@ function AlertEmail({ error }: { error?: string }) {
   (`sr-only`) is still a label.
 - `invalid` only sets `aria-invalid` and the border. Put the message in
   the DOM and point `aria-describedby` at it, so the reason is read out
-  and colour is never the only signal.
+  and colour is never the only signal. `Field` does this for you.
 - The focus ring shows on every focus, not only `:focus-visible`, because
   a text field is always being operated when it has focus.
 - `border-strong` is 3:1 on canvas and surface in both themes (WCAG
@@ -121,6 +111,5 @@ function AlertEmail({ error }: { error?: string }) {
 
 - Start and end adornments (a search glyph, a clear button, a unit): an
   `InputGroup` pattern that wraps the input in the bordered box.
-- `Textarea` and `Select` share these classes; extract a shared control
-  class set when the second one lands.
-- A `Field` pattern that wires label, description and error.
+- `Textarea` and `Select` share these classes and the `useFieldControl`
+  opt-in; extract a shared control class set when the second one lands.

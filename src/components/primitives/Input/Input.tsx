@@ -11,11 +11,15 @@
  *   which stays AA on canvas and surface in both themes, so the boundary
  *   keeps 3:1. Pair it with a visible message; colour is never the only
  *   signal.
+ * - Inside a `Field` pattern the input reads `id`, `aria-describedby`,
+ *   `aria-invalid` and `required` from `FieldContext`. Explicit props win.
+ *   Outside a Field nothing changes.
  * - Always full width. The field or the layout decides the width.
  * - Checkbox, radio, file and buttons are other primitives.
  */
 
 import type { InputHTMLAttributes } from "react";
+import { useFieldControl, type FieldControlProps } from "../../../hooks/useFieldControl.ts";
 import { cn } from "../../../utils/cn.ts";
 
 export const inputTypes = [
@@ -40,7 +44,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   readonly type?: InputType;
   /** Height, padding and font size, from the density tokens. Defaults to `md`. */
   readonly size?: InputSize;
-  /** The value fails validation. Sets `aria-invalid`; add a visible message. */
+  /** The value fails validation. Sets `aria-invalid`; add a visible message. Inherited from `Field` when unset. */
   readonly invalid?: boolean;
 }
 
@@ -61,15 +65,34 @@ const sizeClasses: Readonly<Record<InputSize, string>> = {
   lg: "h-control-lg px-inset-lg text-base",
 };
 
-export function Input({ type = "text", size = "md", invalid = false, className, ...rest }: InputProps) {
+export function Input({
+  type = "text",
+  size = "md",
+  invalid,
+  className,
+  id,
+  required,
+  "aria-describedby": ariaDescribedBy,
+  ...rest
+}: InputProps) {
+  const own: { -readonly [K in keyof FieldControlProps]: FieldControlProps[K] } = {};
+  if (id !== undefined) own.id = id;
+  if (ariaDescribedBy !== undefined) own["aria-describedby"] = ariaDescribedBy;
+  if (invalid) own["aria-invalid"] = true;
+  if (required) own.required = true;
+  const wired = useFieldControl(own);
+  // `invalid={false}` is an explicit answer and overrides the Field.
+  const isInvalid = invalid ?? wired["aria-invalid"] === true;
+
   return (
     <input
       {...rest}
+      {...wired}
       type={type}
       className={cn(base, sizeClasses[size], className)}
-      aria-invalid={invalid || undefined}
+      aria-invalid={isInvalid || undefined}
       data-size={size}
-      data-invalid={invalid || undefined}
+      data-invalid={isInvalid || undefined}
     />
   );
 }

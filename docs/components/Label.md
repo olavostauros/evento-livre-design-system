@@ -7,6 +7,9 @@ native `<label>` in the `label` text style.
 
 - Every `Input`, and later every Textarea, Select, Checkbox, Radio and
   Switch. A control without a label has no name.
+- Directly, when the layout puts the label beside the control. For a
+  stacked form row with a description or error, use `Field`, which
+  renders this Label and does the wiring.
 
 ## When not to use
 
@@ -32,7 +35,7 @@ import { useId } from "react";
 import { Label } from "@evento-livre/design-system/components/primitives/Label";
 import { Input } from "@evento-livre/design-system/components/primitives/Input";
 
-// B2C: e-mail for event alerts
+// B2C: e-mail for event alerts, wired by hand (Field does this for you)
 function AlertEmail() {
   const id = useId();
   return (
@@ -63,6 +66,5 @@ function AlertEmail() {
 
 ## Open
 
-- A `Field` pattern in `patterns/` that composes Label, a control, a
-  description and an error message and wires `id`, `aria-describedby` and
-  `aria-invalid`. Until then, wire them by hand as in the example.
+- Nothing at the moment. Group captions (`Fieldset`) are tracked in the
+  Field doc.

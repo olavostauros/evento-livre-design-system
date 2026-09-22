@@ -12,6 +12,7 @@ Single source of truth for design values. `scripts/build-theme.ts` reads
 | `radii.ts` | xs to full; roles control, container, sheet, chip | 0006 | `docs/foundations/shape.md` |
 | `elevation.ts` | levels 0 to 3; light shadows; dark hairlines | 0006 | `docs/foundations/shape.md` |
 | `motion.ts` | durations, easings, distances, tempos, presets | 0003 | `docs/foundations/motion.md` |
+| `icons.ts` | icon sizes, drawing grid, stroke width (glyphs not drawn yet) | 0002, semiotics | `docs/components/Icon.md` |
 | `index.ts` | re-exports | | |
 
 Each token file has a colocated `*.test.ts` that enforces the guarantees its

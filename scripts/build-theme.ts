@@ -32,6 +32,7 @@ import {
   elevationSurface,
   fontFamilies,
   fontWeights,
+  iconSizes,
   palette,
   radii,
   radiusRoles,
@@ -171,6 +172,12 @@ function emitSpacingStatic(): string[] {
   return ["  /* Spacing: 4px base (0006). */", line("--spacing", rem(spacingBase))];
 }
 
+function emitIconStatic(): string[] {
+  const out = ["  /* Icons: rendered box per size. `size-icon-md`. */"];
+  for (const [name, px] of Object.entries(iconSizes)) out.push(line(`--spacing-icon-${name}`, rem(px)));
+  return out;
+}
+
 function emitDensityAliases(): string[] {
   const out = ["  /* Spacing: density resolves per register. `p-inset-md`, `h-control-md`, `gap-stack-sm`. */"];
   for (const key of densityKeys) out.push(line(`--spacing-${key}`, `var(${P}-spacing-${key})`));
@@ -290,6 +297,7 @@ function render(): string {
     ...emitColorPalette(), "",
     ...emitTypographyStatic(), "",
     ...emitSpacingStatic(), "",
+    ...emitIconStatic(), "",
     ...emitRadiiStatic(), "",
     ...emitElevationStatic(), "",
     ...emitMotionStatic(),

@@ -50,8 +50,9 @@ src/
 ## Brand decisions are temporary
 
 The four brand-defining decisions in `docs/decisions/` (colour palette,
-logotype, motion language, typography) are **accepted as temporary** as of
-2026-09-22. Build on them, but build so they can be swapped:
+logotype, motion language, typography) and the shape decision (0006) are
+**accepted as temporary** as of 2026-09-22. Build on them, but build so they
+can be swapped:
 
 - Name tokens by role (`brand-primary`, `accent-b2c`), never by hue.
 - Keep the `Logo` component's API independent of the artwork.

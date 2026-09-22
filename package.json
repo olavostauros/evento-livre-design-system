@@ -1,0 +1,26 @@
+{
+  "name": "@evento-livre/design-system",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared tokens, brand assets and React components for Evento Livre products.",
+  "scripts": {
+    "build:palette": "bun run scripts/build-palette.ts",
+    "build:theme": "bun run scripts/build-theme.ts",
+    "check:theme": "bun run scripts/build-theme.ts --check",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "check": "bun run check:theme && bun run typecheck && bun test"
+  },
+  "peerDependencies": {
+    "react": "^19",
+    "react-dom": "^19"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

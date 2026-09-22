@@ -5,7 +5,8 @@ Start with `MISSION.md`, then `CLAUDE.md`.
 
 Status: all foundation tokens (colour, typography, spacing, radii,
 elevation, motion) and the Tailwind theme pipeline exist, as experiments.
-First primitive: `Button`. No brand assets yet.
+Primitives: `Button`, `Text`, `Icon`, `Link`, `Label`, `Input`. No brand
+assets yet.
 
 ```sh
 bun install

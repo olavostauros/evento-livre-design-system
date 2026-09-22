@@ -10,3 +10,4 @@ accessibility notes. Mirror the folder layout in `src/components/`.
 | [Icon](Icon.md) | `primitives/Icon` | experimental |
 | [Link](Link.md) | `primitives/Link` | experimental |
 | [Label](Label.md) | `primitives/Label` | experimental |
+| [Input](Input.md) | `primitives/Input` | experimental |
